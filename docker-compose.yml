@@ -1,0 +1,56 @@
+version: '3.1'
+
+services:
+  raft-stash-1:
+    networks:
+      main:
+        aliases:
+          - node-1
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "11000:11000"
+      - "12000:12000"
+    entrypoint:
+      - /go/src/github.com/sherodtaylor/raft-stash/out/raftstash-unix
+      - -id=node-1
+      - .
+  raft-stash-2:
+    networks:
+      main:
+        aliases:
+          - node-2
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "11001:11001"
+      - "12001:12001"
+    entrypoint:
+      - /go/src/github.com/sherodtaylor/raft-stash/out/raftstash-unix
+      - -haddr=node-2:11001
+      - -raddr=node-2:12001
+      - -join=node-1:11000
+      - -id=node-2
+      - .
+  raft-stash-3:
+    networks:
+      main:
+        aliases:
+          - node-3
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "11002:11002"
+      - "12002:12002"
+    entrypoint:
+      - /go/src/github.com/sherodtaylor/raft-stash/out/raftstash-unix
+      - -haddr=node-3:11002
+      - -raddr=node-3:12002
+      - -join=node-1:11000
+      - -id=node-3
+      - .
+networks:
+  main:
