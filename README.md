@@ -31,5 +31,10 @@ $ ./raftstash-cli get hello
 {"hello": "sherod"}
 ``
 
+## Build locally
+```
+$ make build
+$ make build-linux ## for linux
+```
 
 
